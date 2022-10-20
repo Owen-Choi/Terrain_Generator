@@ -159,7 +159,6 @@ class TerrainChunk {
             this._plane.geometry.vertices[f.b],
             this._plane.geometry.vertices[f.c]
         ];
-        this._plane.geometry.map = THREE.ImageUtils.loadTexture("./resources/grass_rock_texture.jpg")
 
         const vertexColours = [];
         for (let v of vs) {
@@ -278,6 +277,8 @@ class TerrainChunkManager {
     return x + '.' + z;
   }
 
+
+  // 매개변수 받아서 chunk 추가해주는 코드. 텍스쳐맵과는 관련이 없어보인다.
   _AddChunk(x, z) {
     const offset = new THREE.Vector2(x * this._chunkSize, z * this._chunkSize);
     const chunk = new TerrainChunk({
