@@ -220,7 +220,8 @@ function init()
     loader.load('scene.gltf', (gltf) => {
         model = gltf.scene.children[0];
         model.scale.setScalar(0.5);
-        model.rotation.z = 116.2
+        // model.rotation.z = 116.2
+        model.position.set(30, 25.1, 0);
         const group = new THREE.Group();
         group.add(model);
         scene.add(group);
@@ -267,39 +268,39 @@ function update()
 
     // move forwards/backwards/left/right
     if ( keyboard.pressed("W") )
-        MovingCube.translateZ( -moveDistance );
+        model.translateZ( -moveDistance );
     if ( keyboard.pressed("S") )
-        MovingCube.translateZ(  moveDistance );
+        model.translateZ(  moveDistance );
     if ( keyboard.pressed("Q") )
-        MovingCube.translateX( -moveDistance );
+        model.translateX( -moveDistance );
     if ( keyboard.pressed("E") )
-        MovingCube.translateX(  moveDistance );
+        model.translateX(  moveDistance );
 
     // rotate left/right/up/down
     var rotation_matrix = new THREE.Matrix4().identity();
     if ( keyboard.pressed("A") )
-        MovingCube.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
+        model.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
     if ( keyboard.pressed("D") )
-        MovingCube.rotateOnAxis( new THREE.Vector3(0,1,0), -rotateAngle);
+        model.rotateOnAxis( new THREE.Vector3(0,1,0), -rotateAngle);
     if ( keyboard.pressed("R") )
-        MovingCube.rotateOnAxis( new THREE.Vector3(1,0,0), rotateAngle);
+        model.rotateOnAxis( new THREE.Vector3(1,0,0), rotateAngle);
     if ( keyboard.pressed("F") )
-        MovingCube.rotateOnAxis( new THREE.Vector3(1,0,0), -rotateAngle);
+        model.rotateOnAxis( new THREE.Vector3(1,0,0), -rotateAngle);
 
     if ( keyboard.pressed("Z") )
     {
-        MovingCube.position.set(0,25.1,0);
-        MovingCube.rotation.set(0,0,0);
+        model.position.set(0,25.1,0);
+        model.rotation.set(0,0,0);
     }
 
     var relativeCameraOffset = new THREE.Vector3(0,50,200);
 
-    var cameraOffset = relativeCameraOffset.applyMatrix4( MovingCube.matrixWorld );
+    var cameraOffset = relativeCameraOffset.applyMatrix4( model.matrixWorld );
 
     camera.position.x = cameraOffset.x;
     camera.position.y = cameraOffset.y;
     camera.position.z = cameraOffset.z;
-    camera.lookAt( MovingCube.position );
+    camera.lookAt( model.position );
 
     //camera.updateMatrix();
     //camera.updateProjectionMatrix();
