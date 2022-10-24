@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<script src="js/Three.js"></script>
+<script src="js/three.min.js"></script>
 <script src="js/Detector.js"></script>
 <script src="js/Stats.js"></script>
 <script src="js/CustomOrbitControls.js"></script>
@@ -16,6 +16,7 @@
 <script src="js/THREEx.KeyboardState.js"></script>
 <script src="js/THREEx.FullScreen.js"></script>
 <script src="js/THREEx.WindowResize.js"></script>
+<script src="js/GLTFLoader.js"></script>
 
 <!-- ---------------- Custom Shader Code ------------------------ -->
 <script id="vertexShader" type="x-shader/x-vertex">
@@ -144,7 +145,7 @@ function init()
 	floor.rotation.x = Math.PI / 2;
 	//scene.add(floor);
 	// SKYBOX
-	var skyBoxGeometry = new THREE.CubeGeometry( 20000, 20000, 10000 );
+	var skyBoxGeometry = new THREE.BoxGeometry( 20000, 20000, 10000 );
 	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
 	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
 	scene.add(skyBox);
@@ -204,13 +205,26 @@ function init()
 
 	var waterGeo = new THREE.PlaneGeometry( 1000, 1000, 1, 1 );
 	var waterTex = new THREE.ImageUtils.loadTexture( 'images/water512.jpg' );
-	waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping; 
+	waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
 	waterTex.repeat.set(5,5);
 	var waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent:true, opacity:0.40} );
 	var water = new THREE.Mesh(	planeGeo, waterMat );
 	water.rotation.x = -Math.PI / 2;
 	water.position.y = -50;
 	scene.add( water);
+
+    const loader = new THREE.GLTFLoader();
+
+    loader.setPath('./images/models/x-wing/');
+
+    loader.load('scene.gltf', (gltf) => {
+        model = gltf.scene.children[0];
+        model.scale.setScalar(0.5);
+        model.rotation.z = 116.2
+        const group = new THREE.Group();
+        group.add(model);
+        scene.add(group);
+    });
 
     var materialArray = [];
     materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/xpos.png' ) }));
@@ -220,7 +234,7 @@ function init()
     materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/zpos.png' ) }));
     materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/zneg.png' ) }));
     var MovingCubeMat = new THREE.MeshFaceMaterial(materialArray);
-    var MovingCubeGeom = new THREE.CubeGeometry( 50, 50, 50, 1, 1, 1, materialArray );
+    var MovingCubeGeom = new THREE.BoxGeometry( 50, 50, 50, 1, 1, 1, materialArray );
     MovingCube = new THREE.Mesh( MovingCubeGeom, MovingCubeMat );
     MovingCube.position.set(0, 25.1, 0);
     scene.add( MovingCube );
